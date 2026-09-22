@@ -14,7 +14,6 @@
     --text-main: #1a202c;
     --text-muted: #718096;
     --text-light: #a0aec0;
-    --active-blue: #0e6ba8;
     --success-green: #38a169;
     --warning-orange: #dd6b20;
     --danger-red: #e53e3e;
@@ -103,7 +102,7 @@
   /* =================== MAIN =================== */
   .main { flex: 1; padding: 24px 28px; overflow-y: auto; min-width: 0; }
 
-  /* =================== PRIMARY TABS (Objects/Compares/...) =================== */
+  /* =================== PRIMARY TABS =================== */
   .primary-tabs {
     display: flex; gap: 4px;
     border-bottom: 1px solid var(--border-color);
@@ -114,7 +113,6 @@
     color: var(--text-muted); font-weight: 500;
     border-bottom: 2px solid transparent;
     font-size: 14px; transition: all 0.15s;
-    position: relative;
   }
   .primary-tab.active {
     color: var(--header-blue);
@@ -147,12 +145,12 @@
   }
   .toolbar-select {
     height: 38px;
-    min-width: 130px;
+    min-width: 140px;
     border: 1px solid var(--border-color);
     background: var(--bg-panel);
-    color: var(--text-muted);
+    color: var(--text-main);
     border-radius: 6px;
-    padding: 0 12px;
+    padding: 0 34px 0 12px;
     font-size: 13px;
     outline: none;
     cursor: pointer;
@@ -161,9 +159,9 @@
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
     background-repeat: no-repeat;
     background-position: right 12px center;
-    padding-right: 34px;
   }
   .toolbar-select:focus { border-color: var(--header-blue); }
+  .toolbar-select.active-filter { border-color: var(--header-blue); background-color: #f0f8ff; }
 
   .toolbar-search {
     position: relative;
@@ -195,7 +193,7 @@
     align-items: center;
   }
 
-  /* =================== TOOLBAR ROW 2 (Snapshots + Actions) =================== */
+  /* =================== SNAPSHOTS ROW =================== */
   .snapshots-row {
     padding-top: 8px;
     padding-bottom: 16px;
@@ -277,12 +275,7 @@
     white-space: nowrap;
   }
   .btn-action:hover { background: #f8fafc; border-color: #cbd5e0; }
-  .btn-action .btn-ico {
-    font-size: 15px;
-    display: inline-flex;
-    align-items: center;
-    line-height: 1;
-  }
+  .btn-action .btn-ico { font-size: 15px; display: inline-flex; align-items: center; line-height: 1; }
 
   .btn-backup {
     background: var(--header-blue);
@@ -292,37 +285,6 @@
   }
   .btn-backup:hover { background: var(--header-blue-dark); border-color: var(--header-blue-dark); }
 
-  /* =================== GROUPING TABS =================== */
-  .group-tabs {
-    display: flex; gap: 4px;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 20px;
-  }
-  .group-tab {
-    padding: 10px 18px; cursor: pointer;
-    color: var(--text-muted); font-weight: 500;
-    border-bottom: 2px solid transparent;
-    font-size: 14px; transition: all 0.15s;
-    position: relative;
-  }
-  .group-tab.active {
-    color: var(--header-blue);
-    border-bottom-color: var(--header-blue);
-    font-weight: 600;
-  }
-  .group-tab:hover:not(.active) { color: var(--text-main); }
-  .group-tab .badge {
-    display: inline-block;
-    background: #e2e8f0;
-    color: var(--text-muted);
-    font-size: 11px;
-    padding: 1px 7px;
-    border-radius: 10px;
-    margin-left: 6px;
-    font-weight: 600;
-  }
-  .group-tab.active .badge { background: #bee3f8; color: var(--header-blue); }
-
   /* =================== VIEW / RESTORE HEADING =================== */
   .view-restore-heading {
     display: flex; align-items: center; gap: 8px;
@@ -330,6 +292,10 @@
     margin-bottom: 14px; color: var(--text-main);
   }
   .view-restore-heading .sparkle { color: var(--header-blue); font-size: 15px; }
+  .view-restore-heading .category-name {
+    color: var(--header-blue);
+    font-weight: 700;
+  }
 
   /* =================== SEARCH BAR =================== */
   .search-bar {
@@ -366,9 +332,25 @@
     display: flex; align-items: center; justify-content: center;
     color: var(--text-muted); font-size: 14px;
     transition: all 0.15s;
+    position: relative;
   }
   .filter-icon-btn:hover { background: #f8fafc; color: var(--text-main); }
   .filter-icon-btn.active { background: #ebf8ff; color: var(--header-blue); border-color: var(--header-blue); }
+  .filter-icon-btn .filter-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--header-blue);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 1px 6px;
+    min-width: 16px;
+    text-align: center;
+    display: none;
+  }
+  .filter-icon-btn.has-filters .filter-count { display: block; }
 
   .refresh-btn {
     margin-left: auto;
@@ -462,6 +444,14 @@
   .filter-section-title {
     font-size: 13px; font-weight: 700;
     color: var(--text-main); margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-section-title .section-subtitle {
+    font-weight: 500;
+    font-size: 11.5px;
+    color: var(--text-muted);
   }
 
   .content-types-grid {
@@ -479,6 +469,15 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .content-types-grid input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Empty state for content types */
+  .empty-content-types {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 12.5px;
+    font-style: italic;
+  }
 
   .date-range-input {
     width: 100%; height: 36px;
@@ -539,7 +538,7 @@
 <div class="topbar">
   <div class="hamburger"><span></span><span></span><span></span></div>
   <div class="brand">
-    <div class="logo-mark"><span class="red">I</span>DRIVE</div>
+    <div class="logo-mark"><span class="red">Q</span>B</div>
     <span>QuickBooks Backup</span>
   </div>
   <div class="company-title">
@@ -578,7 +577,7 @@
       <div class="primary-tab">Backups</div>
     </div>
 
-    <!-- TOOLBAR ROW 1: Stats + Filters -->
+    <!-- TOOLBAR ROW 1 -->
     <div class="toolbar-row">
       <div class="toolbar-stats">
         <div class="stat-block">
@@ -591,19 +590,19 @@
         </div>
       </div>
       <div class="toolbar-filters">
-        <select class="toolbar-select">
-          <option>Status</option>
-          <option>Completed</option>
-          <option>Limited</option>
-          <option>Read-Only</option>
-          <option>Cannot Backup</option>
+        <select class="toolbar-select" id="statusFilter">
+          <option value="all">All Statuses</option>
+          <option value="completed">Completed</option>
+          <option value="limited">Limited</option>
+          <option value="readonly">Read-Only</option>
+          <option value="cannot">Cannot Backup</option>
         </select>
-        <select class="toolbar-select">
-          <option>Type</option>
-          <option>Transactions</option>
-          <option>Lists</option>
-          <option>Attachables</option>
-          <option>Limitations</option>
+        <select class="toolbar-select active-filter" id="typeFilter">
+          <option value="Transactions">Transactions </option>
+          <option value="Lists">Lists </option>
+          <option value="Attachables">Attachables </option>
+          <option value="Errors">Errors </option>
+          <option value="Limitations">Limitations </option>
         </select>
         <div class="toolbar-search">
           <input type="text" placeholder="Enter 3 or more character" />
@@ -612,7 +611,7 @@
       </div>
     </div>
 
-    <!-- TOOLBAR ROW 2: Snapshots + Action Buttons -->
+    <!-- SNAPSHOTS ROW -->
     <div class="toolbar-row snapshots-row">
       <div class="snapshots-left">
         <span class="snapshots-label">Snapshots</span>
@@ -626,40 +625,26 @@
         </label>
       </div>
       <div class="snapshots-actions">
-        <button class="btn-action">
-          <span class="btn-ico">▦</span> Compare
-        </button>
-        <button class="btn-action">
-          <span class="btn-ico">↻</span> Restore
-        </button>
-        <button class="btn-action">
-          <span class="btn-ico">⬇</span> Export
-        </button>
-        <button class="btn-action btn-backup">
-          <span class="btn-ico">☁</span> Backup
-        </button>
+        <button class="btn-action"><span class="btn-ico">▦</span> Compare</button>
+        <button class="btn-action"><span class="btn-ico">↻</span> Restore</button>
+        <button class="btn-action"><span class="btn-ico">⬇</span> Export</button>
+        <button class="btn-action btn-backup"><span class="btn-ico">☁</span> Backup</button>
       </div>
-    </div>
-
-    <!-- GROUPING TABS -->
-    <div class="group-tabs" id="tabs">
-      <div class="group-tab active" data-cat="Transactions">Transactions <span class="badge">14</span></div>
-      <div class="group-tab" data-cat="Lists">Lists <span class="badge">9</span></div>
-      <div class="group-tab" data-cat="Attachables">Attachables <span class="badge">1</span></div>
-      <div class="group-tab" data-cat="Errors">Errors <span class="badge">0</span></div>
-      <div class="group-tab" data-cat="Limitations">Limitations <span class="badge">20</span></div>
     </div>
 
     <!-- VIEW / RESTORE HEADING -->
     <div class="view-restore-heading">
-      View or restore <span id="currentCategoryLabel">transactions</span>
+      View or restore <span class="category-name" id="currentCategoryLabel">transactions</span>
       <span class="sparkle">✨</span>
     </div>
 
     <!-- SEARCH BAR -->
     <div class="search-bar">
       <input class="search-input" type="text" placeholder="Search for transaction type" id="searchInput" />
-      <button class="filter-icon-btn" id="filterToggle" title="Filters">▼</button>
+      <button class="filter-icon-btn" id="filterToggle" title="Filters">
+        ▼
+        <span class="filter-count" id="filterCount">0</span>
+      </button>
       <button class="refresh-btn" title="Refresh">⟳</button>
     </div>
 
@@ -673,9 +658,7 @@
             <th class="right-align" id="tableCountLabel">Transactions ⓘ</th>
           </tr>
         </thead>
-        <tbody id="tableBody">
-          <!-- Populated by JS -->
-        </tbody>
+        <tbody id="tableBody"></tbody>
       </table>
     </div>
   </main>
@@ -691,9 +674,12 @@
   </div>
 
   <div class="filter-panel-body">
-    <!-- Content Types -->
+    <!-- Content Types (dynamic per group) -->
     <div class="filter-section">
-      <div class="filter-section-title">Content Types</div>
+      <div class="filter-section-title">
+        <span id="contentTypeSectionTitle">Transaction Types</span>
+        <span class="section-subtitle" id="contentTypeSectionSubtitle">(only for Transactions)</span>
+      </div>
       <div class="content-types-grid" id="contentTypesGrid"></div>
     </div>
 
@@ -728,93 +714,194 @@
    ============================================================ */
 const DATA = {
   Transactions: [
-    { name: "Invoices",              count: 2 },
-    { name: "Bills",                 count: 1 },
-    { name: "Bill Payments",         count: 1 },
-    { name: "Journal Entries",       count: 1 },
-    { name: "Estimates",             count: 0 },
-    { name: "Sales Receipts",        count: 0 },
-    { name: "Payments",              count: 0 },
-    { name: "Purchase Orders",       count: 0 },
-    { name: "Credit Memos",          count: 0 },
-    { name: "Refund Receipts",       count: 0 },
-    { name: "Deposits",              count: 0 },
-    { name: "Transfers",             count: 0 },
-    { name: "Inventory Adjustments", count: 0 },
-    { name: "Time Activities",       count: 0 },
+    { name: "Invoices",              count: 2, status: "completed" },
+    { name: "Bills",                 count: 1, status: "completed" },
+    { name: "Bill Payments",         count: 1, status: "completed" },
+    { name: "Journal Entries",       count: 1, status: "completed" },
+    { name: "Estimates",             count: 0, status: "completed" },
+    { name: "Sales Receipts",        count: 0, status: "completed" },
+    { name: "Payments",              count: 0, status: "completed" },
+    { name: "Purchase Orders",       count: 0, status: "completed" },
+    { name: "Credit Memos",          count: 0, status: "completed" },
+    { name: "Refund Receipts",       count: 0, status: "completed" },
+    { name: "Deposits",              count: 0, status: "completed" },
+    { name: "Transfers",             count: 0, status: "completed" },
+    { name: "Inventory Adjustments", count: 0, status: "completed" },
+    { name: "Time Activities",       count: 0, status: "completed" },
   ],
   Lists: [
-    { name: "Accounts",          count: 101 },
-    { name: "Customers",         count: 6 },
-    { name: "Employees",         count: 1 },
-    { name: "Items",             count: 9 },
-    { name: "Payment Methods",   count: 4 },
-    { name: "Terms",             count: 4 },
-    { name: "Vendors",           count: 5 },
-    { name: "Classes",           count: 2 },
-    { name: "Departments",       count: 2 },
+    { name: "Accounts",          count: 101, status: "completed" },
+    { name: "Customers",         count: 6,   status: "completed" },
+    { name: "Employees",         count: 1,   status: "completed" },
+    { name: "Items",             count: 9,   status: "completed" },
+    { name: "Payment Methods",   count: 4,   status: "completed" },
+    { name: "Terms",             count: 4,   status: "completed" },
+    { name: "Vendors",           count: 5,   status: "completed" },
+    { name: "Classes",           count: 2,   status: "completed" },
+    { name: "Departments",       count: 2,   status: "completed" },
   ],
   Attachables: [
-    { name: "Attachments & Receipts", count: 2 },
+    { name: "Attachments & Receipts", count: 2, status: "completed" },
   ],
   Errors: [
-    { name: "Sync Errors",         count: 0 },
-    { name: "Permission Errors",   count: 0 },
-    { name: "Validation Errors",   count: 0 },
+    { name: "Sync Errors",         count: 0, status: "cannot" },
+    { name: "Permission Errors",   count: 0, status: "cannot" },
+    { name: "Validation Errors",   count: 0, status: "cannot" },
   ],
   Limitations: [
-    { name: "Recurring Transactions",      count: 0 },
-    { name: "Budgets",                     count: 0 },
-    { name: "Customer Types",              count: 0 },
-    { name: "Exchange Rates",              count: 0 },
-    { name: "Tax Codes & Rates",           count: 5 },
-    { name: "Preferences (Settings)",      count: 1 },
-    { name: "Company Info",                count: 1 },
-    { name: "Bank Rules",                  count: 0 },
-    { name: "Banking Feeds",               count: 0 },
-    { name: "Custom Forms",                count: 0 },
-    { name: "Custom Reports",              count: 0 },
-    { name: "Audit Log Entries",           count: 0 },
-    { name: "Sales Orders",                count: 0 },
-    { name: "Item Receipts",               count: 0 },
-    { name: "Price Rules",                 count: 0 },
-    { name: "Delayed Charges / Credits",   count: 0 },
-    { name: "Mileage Logs",                count: 0 },
-    { name: "Payroll",                     count: 0 },
-    { name: "QuickBooks Payments",         count: 0 },
-    { name: "Shipping Labels",             count: 0 },
+    { name: "Recurring Transactions",      count: 0, status: "limited" },
+    { name: "Budgets",                     count: 0, status: "limited" },
+    { name: "Customer Types",              count: 0, status: "limited" },
+    { name: "Exchange Rates",              count: 0, status: "limited" },
+    { name: "Tax Codes & Rates",           count: 5, status: "readonly" },
+    { name: "Preferences (Settings)",      count: 1, status: "readonly" },
+    { name: "Company Info",                count: 1, status: "readonly" },
+    { name: "Bank Rules",                  count: 0, status: "cannot" },
+    { name: "Banking Feeds",               count: 0, status: "cannot" },
+    { name: "Custom Forms",                count: 0, status: "cannot" },
+    { name: "Custom Reports",              count: 0, status: "cannot" },
+    { name: "Audit Log Entries",           count: 0, status: "cannot" },
+    { name: "Sales Orders",                count: 0, status: "cannot" },
+    { name: "Item Receipts",               count: 0, status: "cannot" },
+    { name: "Price Rules",                 count: 0, status: "cannot" },
+    { name: "Delayed Charges / Credits",   count: 0, status: "cannot" },
+    { name: "Mileage Logs",                count: 0, status: "cannot" },
+    { name: "Payroll",                     count: 0, status: "cannot" },
+    { name: "QuickBooks Payments",         count: 0, status: "cannot" },
+    { name: "Shipping Labels",             count: 0, status: "cannot" },
   ]
 };
 
-const CONTENT_TYPES = [
-  "All Types", "Account", "Attachable",
-  "Bill", "Bill Payment", "Budget",
-  "Class", "Company Currency", "Credit Memo",
-  "Customer", "Department", "Deposit",
-  "Employee", "Estimate", "Invoice",
-  "Item", "Journal Entry", "Payment",
-  "Payment Method", "Preference", "Purchase",
-  "Purchase Order", "Refund Receipt", "Sales Receipt",
-  "Tax Agency", "Tax Code", "Tax Rate",
-  "Term", "Time Activity", "Transfer",
-  "Vendor", "Vendor Credit"
-];
+/* ============================================================
+   CONTENT TYPES PER GROUP (the key improvement)
+   ============================================================ */
+const CONTENT_TYPES_BY_GROUP = {
+  Transactions: [
+    "All Transaction Types",
+    "Invoice", "Bill", "Bill Payment",
+    "Payment", "Journal Entry", "Sales Receipt",
+    "Estimate", "Purchase", "Purchase Order",
+    "Credit Memo", "Refund Receipt", "Deposit",
+    "Transfer", "Time Activity", "Vendor Credit",
+    "Inventory Adjustment"
+  ],
+  Lists: [
+    "All List Types",
+    "Account", "Customer", "Vendor",
+    "Item", "Employee", "Class",
+    "Department", "Payment Method", "Term",
+    "Company Currency"
+  ],
+  Attachables: [
+    "All Attachables",
+    "Attachable"
+  ],
+  Errors: [
+    "All Error Types",
+    "Sync Errors", "Permission Errors", "Validation Errors"
+  ],
+  Limitations: [
+    "All Limitations",
+    "Recurring Transactions", "Budgets", "Customer Types",
+    "Exchange Rates", "Tax Codes & Rates", "Preferences (Settings)",
+    "Company Info", "Bank Rules", "Banking Feeds",
+    "Custom Forms", "Custom Reports", "Audit Log Entries",
+    "Sales Orders", "Item Receipts", "Price Rules",
+    "Delayed Charges / Credits", "Mileage Logs",
+    "Payroll", "QuickBooks Payments", "Shipping Labels"
+  ]
+};
+
+/* Section title & subtitle per group */
+const SECTION_TITLES = {
+  Transactions: { title: "Transaction Types",    sub: "(filter transactions by type)" },
+  Lists:        { title: "List Types",            sub: "(filter lists by category)" },
+  Attachables:  { title: "Attachment Types",      sub: "(filter attachments)" },
+  Errors:       { title: "Error Types",           sub: "(filter errors)" },
+  Limitations:  { title: "Limitation Types",      sub: "(filter unsupported objects)" }
+};
 
 /* ============================================================
    STATE
    ============================================================ */
 let currentCategory = "Transactions";
+let currentStatus = "all";
+let appliedFilterCount = 0;
 
 /* ============================================================
-   RENDER TABLE
+   DOM REFS
    ============================================================ */
 const tbody = document.getElementById("tableBody");
 const tableHeaderLabel = document.getElementById("tableHeaderLabel");
 const tableCountLabel = document.getElementById("tableCountLabel");
 const currentCategoryLabel = document.getElementById("currentCategoryLabel");
+const typeFilter = document.getElementById("typeFilter");
+const statusFilter = document.getElementById("statusFilter");
+const ctGrid = document.getElementById("contentTypesGrid");
+const ctSectionTitle = document.getElementById("contentTypeSectionTitle");
+const ctSectionSubtitle = document.getElementById("contentTypeSectionSubtitle");
+const searchInput = document.getElementById("searchInput");
+const filterToggle = document.getElementById("filterToggle");
+const filterCount = document.getElementById("filterCount");
 
-function renderTable(category) {
-  const rows = DATA[category] || [];
+/* ============================================================
+   RENDER CONTENT TYPES (DYNAMIC per group)
+   ============================================================ */
+function renderContentTypes() {
+  const items = CONTENT_TYPES_BY_GROUP[currentCategory] || [];
+  const titles = SECTION_TITLES[currentCategory] || { title: "Content Types", sub: "" };
+
+  ctSectionTitle.textContent = titles.title;
+  ctSectionSubtitle.textContent = titles.sub;
+
+  if (items.length === 0) {
+    ctGrid.innerHTML = `<div class="empty-content-types">No content types available</div>`;
+    return;
+  }
+
+  ctGrid.innerHTML = items.map((name, idx) => `
+    <label class="ct-label">
+      <input type="checkbox" ${idx === 0 ? "checked" : ""} data-ct-name="${name}" />
+      <span>${name}</span>
+    </label>
+  `).join("");
+
+  // Attach listeners to update filter count
+  ctGrid.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", updateFilterCount);
+  });
+
+  updateFilterCount();
+}
+
+/* ============================================================
+   UPDATE FILTER COUNT BADGE
+   ============================================================ */
+function updateFilterCount() {
+  // Count how many checkboxes are checked (excluding "All ..." defaults)
+  const checked = ctGrid.querySelectorAll('input[type="checkbox"]:checked').length;
+  // Count any checked non-default options
+  const activeCustom = Array.from(ctGrid.querySelectorAll('input[type="checkbox"]:checked'))
+    .filter(cb => !cb.getAttribute("data-ct-name").startsWith("All ")).length;
+
+  appliedFilterCount = activeCustom;
+  filterCount.textContent = appliedFilterCount;
+  if (appliedFilterCount > 0) {
+    filterToggle.classList.add("has-filters");
+  } else {
+    filterToggle.classList.remove("has-filters");
+  }
+}
+
+/* ============================================================
+   RENDER TABLE
+   ============================================================ */
+function renderTable() {
+  let rows = DATA[currentCategory] || [];
+
+  if (currentStatus !== "all") {
+    rows = rows.filter(r => r.status === currentStatus);
+  }
 
   const labelMap = {
     Transactions: "transaction type",
@@ -831,9 +918,20 @@ function renderTable(category) {
     Limitations: "Records"
   };
 
-  tableHeaderLabel.textContent = labelMap[category] + " ↑";
-  tableCountLabel.textContent = countLabelMap[category] + " ⓘ";
-  currentCategoryLabel.textContent = labelMap[category].replace(" type", "s");
+  tableHeaderLabel.textContent = labelMap[currentCategory] + " ↑";
+  tableCountLabel.textContent = countLabelMap[currentCategory] + " ⓘ";
+  currentCategoryLabel.textContent = labelMap[currentCategory].replace(" type", "s");
+
+  if (rows.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="3" style="text-align:center; padding:40px 16px; color:var(--text-muted);">
+          No ${currentCategory.toLowerCase()} match your filters.
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   tbody.innerHTML = rows.map((r) => `
     <tr>
@@ -845,18 +943,31 @@ function renderTable(category) {
 }
 
 /* ============================================================
-   RENDER FILTER CONTENT TYPES
+   TYPE FILTER (updates table + filter panel)
    ============================================================ */
-const ctGrid = document.getElementById("contentTypesGrid");
-ctGrid.innerHTML = CONTENT_TYPES.map((name, idx) => `
-  <label class="ct-label">
-    <input type="checkbox" ${idx === 0 ? "checked" : ""} />
-    <span>${name}</span>
-  </label>
-`).join("");
+typeFilter.addEventListener("change", (e) => {
+  currentCategory = e.target.value;
+
+  // Update search placeholder
+  searchInput.placeholder = "Search for " + currentCategory.toLowerCase().replace(/s$/, "") + " type";
+
+  // Re-render content types in filter panel for new group
+  renderContentTypes();
+
+  // Re-render table
+  renderTable();
+});
 
 /* ============================================================
-   PRIMARY TAB SWITCHING
+   STATUS FILTER
+   ============================================================ */
+statusFilter.addEventListener("change", (e) => {
+  currentStatus = e.target.value;
+  renderTable();
+});
+
+/* ============================================================
+   PRIMARY TAB SWITCHING (visual only)
    ============================================================ */
 document.querySelectorAll(".primary-tab").forEach((tab) => {
   tab.addEventListener("click", () => {
@@ -866,29 +977,17 @@ document.querySelectorAll(".primary-tab").forEach((tab) => {
 });
 
 /* ============================================================
-   GROUP TAB SWITCHING
-   ============================================================ */
-document.querySelectorAll("#tabs .group-tab").forEach((tab) => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll("#tabs .group-tab").forEach((t) => t.classList.remove("active"));
-    tab.classList.add("active");
-    currentCategory = tab.getAttribute("data-cat");
-    renderTable(currentCategory);
-  });
-});
-
-/* ============================================================
    FILTER PANEL OPEN/CLOSE
    ============================================================ */
 const filterPanel = document.getElementById("filterPanel");
 const overlay = document.getElementById("overlay");
-const filterToggle = document.getElementById("filterToggle");
 const closeFilter = document.getElementById("closeFilter");
 const cancelFilter = document.getElementById("cancelFilter");
 const applyFilter = document.getElementById("applyFilter");
 const resetFilter = document.getElementById("resetFilter");
 
 function openFilterPanel() {
+  renderContentTypes(); // Ensure it matches current group
   filterPanel.classList.add("open");
   overlay.classList.add("active");
   filterToggle.classList.add("active");
@@ -915,6 +1014,7 @@ resetFilter.addEventListener("click", () => {
   document.querySelectorAll(".showing-options input").forEach((cb, idx) => {
     cb.checked = idx === 0;
   });
+  updateFilterCount();
 });
 
 /* ============================================================
@@ -939,7 +1039,8 @@ document.querySelectorAll(".sidebar .nav-item").forEach((item) => {
 /* ============================================================
    INIT
    ============================================================ */
-renderTable(currentCategory);
+renderTable();
+renderContentTypes();
 </script>
 
 </body>
